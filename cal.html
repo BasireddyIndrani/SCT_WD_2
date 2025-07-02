@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scientific Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: linear-gradient(to right, #f0f4f8, #dbeafe);
+      color: #1e293b;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .calculator {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      width: 400px;
+    }
+
+    .display {
+      width: 100%;
+      height: 60px;
+      background: #e2e8f0;
+      border: none;
+      font-size: 26px;
+      color: #1e3a8a;
+      text-align: right;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: inset 0 0 5px #cbd5e1;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      padding: 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #e0f2fe;
+      color: #1e3a8a;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #bae6fd;
+      transform: scale(1.05);
+    }
+
+    .equal {
+      grid-column: span 2;
+      background-color: #86efac;
+    }
+
+    .equal:hover {
+      background-color: #4ade80;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <input type="text" id="display" class="display" readonly />
+    <div class="buttons">
+      <button onclick="clearDisplay()">C</button>
+      <button onclick="backspace()">⌫</button>
+      <button onclick="appendSymbol('π')">π</button>
+      <button onclick="appendSymbol('e')">e</button>
+      <button onclick="append('/')">÷</button>
+
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button onclick="append('*')">×</button>
+      <button onclick="append('^')">^</button>
+
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button onclick="append('-')">−</button>
+      <button onclick="appendSymbol('√(')">√</button>
+
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button onclick="append('+')">+</button>
+      <button onclick="appendSymbol('log(')">log</button>
+
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button onclick="appendSymbol('sin(')">sin</button>
+      <button onclick="appendSymbol('cos(')">cos</button>
+      <button onclick="appendSymbol('tan(')">tan</button>
+
+      <button onclick="append('(')">(</button>
+      <button onclick="append(')')">)</button>
+      <button class="equal" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById("display");
+
+    function append(val) {
+      display.value += val;
+    }
+
+    function appendSymbol(symbol) {
+      display.value += symbol;
+    }
+
+    function clearDisplay() {
+      display.value = '';
+    }
+
+    function backspace() {
+      display.value = display.value.slice(0, -1);
+    }
+
+    function calculate() {
+      try {
+        let expr = display.value
+          .replace(/π/g, 'Math.PI')
+          .replace(/e/g, 'Math.E')
+          .replace(/sin\(/g, 'Math.sin(')
+          .replace(/cos\(/g, 'Math.cos(')
+          .replace(/tan\(/g, 'Math.tan(')
+          .replace(/log\(/g, 'Math.log10(')
+          .replace(/√\(/g, 'Math.sqrt(')
+          .replace(/\^/g, '');
+
+        const result = eval(expr);
+        display.value = result;
+      } catch (error) {
+        display.value = 'Error';
+      }
+    }
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") calculate();
+      else if (e.key === "Backspace") backspace();
+      else if (e.key === "Escape") clearDisplay();
+      else if ("0123456789+-*/.^()".includes(e.key)) append(e.key);
+    });
+  </script>
+
+</body>
+</html>
+>
